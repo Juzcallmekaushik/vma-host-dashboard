@@ -20,15 +20,24 @@ export default function HomePage() {
     useEffect(() => {
         async function fetchCounts() {
             setLoading(true);
-            const [{ count: clubs }, { count: payments }, { count: approved }, { count: competitions }, { count: coaches }, { count: demos }] = await Promise.all([
-                supabase.from('clubs').select('*', { count: 'exact', head: true }).eq('club_id', ),
+            const [
+                { count: clubs },
+                { count: payments },
+                { count: approvedPayments },
+                { count: competitions },
+                { count: coaches },
+                { count: demos }
+            ] = await Promise.all([
+                supabase.from('clubs').select('*', { count: 'exact', head: true }),
+                supabase.from('payments').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+                supabase.from('payments').select('*', { count: 'exact', head: true }).eq('status', 'approved'),
                 supabase.from('competitors').select('*', { count: 'exact', head: true }),
                 supabase.from('coaches').select('*', { count: 'exact', head: true }),
                 supabase.from('demo').select('*', { count: 'exact', head: true }),
             ]);
             setClubsCount(clubs || 0);
             setPaymentsCount(payments || 0);
-            setApprovedPaymentsCount(approved || 0);
+            setApprovedPaymentsCount(approvedPayments || 0);
             setCompetitionsCount(competitions || 0);
             setCoachesCount(coaches || 0);
             setDemoCount(demos || 0);
@@ -54,11 +63,11 @@ export default function HomePage() {
 
     const stats = [
         { label: "Clubs Registered", value: clubsCount, href: "/clubs" },
-        { label: "Pending Payments", value: paymentsCount, href: "/payments" },
-        { label: "Approved Payments", value: approvedPaymentsCount, href: "/payments?status=approved" },
-        { label: "Total Competitors", value: competitionsCount, href: "/competitors" },
-        { label: "Total Team Managers & Coaches", value: coachesCount, href: "/coaches" },
-        { label: "Total Team Demonstrations", value: demoCount, href: "/demo" },
+        { label: "Pending Payments", value: paymentsCount, href: "/payments/pending" },
+        { label: "Approved Payments", value: approvedPaymentsCount, href: "/payments/approved" },
+        { label: "Total Competitors", value: competitionsCount, href: "" },
+        { label: "Total Team Managers & Coaches", value: coachesCount, href: "" },
+        { label: "Total Team Demonstrations", value: demoCount, href: "" },
     ];
 
     return (
