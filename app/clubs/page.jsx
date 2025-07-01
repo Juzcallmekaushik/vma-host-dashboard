@@ -44,7 +44,7 @@ export default function HomePage() {
                     className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-xs font-bold"
                     onClick={async () => {
                         await supabase.auth.signOut();
-                        window.location.reload();
+                        window.location.href = "/login";
                     }}
                 >
                     Log out
